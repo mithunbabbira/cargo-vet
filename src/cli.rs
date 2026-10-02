@@ -536,6 +536,14 @@ pub struct CertifyArgs {
     /// If not provided, we will collect this information from the local git.
     #[clap(long, action)]
     pub who: Vec<String>,
+    /// Username for the audit
+    ///
+    /// If not provided, we will read the username from the local git config.
+    /// This is a convenience flag for use in automation, where you want to
+    /// specify the auditor's username without the full "name &lt;email&gt;"
+    /// format required by `--who`.
+    #[clap(long, action)]
+    pub username: Option<String>,
     /// A free-form string to include with the new audit entry
     ///
     /// If not provided, there will be no notes.
