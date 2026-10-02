@@ -793,7 +793,12 @@ fn do_cmd_certify(
         return Err(CertifyError::CouldntGuessVersion(package));
     };
 
-    let (username, who) = if sub_args.who.is_empty() {
+    let (username, who) = if let Some(username) = &sub_args.username {
+        // Use --username flag: get email from git config and combine
+        let user_info = get_user_info()?;
+        let who_str = format!("{} <{}>", username, user_info.email);
+        (username.clone(), vec![Spanned::from(who_str)])
+    } else if sub_args.who.is_empty() {
         let user_info = get_user_info()?;
         let who = format!("{} <{}>", user_info.username, user_info.email);
         (user_info.username, vec![Spanned::from(who)])
